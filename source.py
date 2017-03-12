@@ -67,7 +67,7 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 		rows, cols = data_rows.shape
 		#print("ROWS COLS",rows, cols)
 		for current_feature_index in range(2, cols):
-			print('CURRENT FEATURE INDEXXXXXXXX', current_feature_index)
+			print('CURRENT FEATURE INDEX', current_feature_index)
 			if current_feature_index not in used_feature_indexes:
 	
 				split_data = data_rows
@@ -91,10 +91,10 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 					p_right = N_right/total
 		
 					GiniGain = node_gini_impurity - (p_left*gini_left) - (p_right*gini_right)
-					print(GiniGain)
+					#print(GiniGain)
 					#print(left_part)
 					#print(right_part)
-					print('')
+					#print('')
 		
 					if GiniGain > max_gain:
 						max_gain = GiniGain
@@ -108,15 +108,21 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 			used_feature_indexes.append(best_feature_index)
 		
 		print('Best gain is: ', max_gain)
+		print('Best feature index is: ', best_feature_index)
+		
 		print('Best left branch: ')
+		#optimal_left = optimal_left[optimal_left[:,0].argsort()]
 		print(optimal_left)
+		
 		print('Best right branch: ')
+		#optimal_right = optimal_right[optimal_right[:,0].argsort()]
 		print(optimal_right)
+		
 		print(total_iterations)
 		print(used_feature_indexes)
 	
 	
-		if (len(used_feature_indexes) != max_features-1):
+		if (len(used_feature_indexes) != max_features-2):
 			print(len(used_feature_indexes), max_features)
 			trace_tree(optimal_left, max_no_features, used_feature_indexes)
 			trace_tree(optimal_right, max_no_features, used_feature_indexes)
@@ -125,8 +131,8 @@ data_rows = []
 data_rows.append(impurity_matrix[0])
 data_rows.append(impurity_matrix[1])
 
-data_rows.append(impurity_matrix[2])
-data_rows.append(impurity_matrix[3])
+data_rows.append(impurity_matrix[4])
+data_rows.append(impurity_matrix[6])
 
 max_no_features = len(data_rows)
 data_rows = np.array(data_rows)
