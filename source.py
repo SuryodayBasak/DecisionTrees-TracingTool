@@ -3,12 +3,15 @@ import numpy as np
 import time
 
 DATASET = []
+S_no = 0
 
 with open('./training_set.csv', 'r') as csvfile:
 	data = csv.reader(csvfile, delimiter=',')
 	for row in data:
+		S_no += 1
 		temp = []
-
+		temp.append(S_no)
+		
 		for val in row:
 			try:
 				temp.append(float(val))
@@ -31,7 +34,7 @@ def ret_gini (part, current_feature_index):
 	no_pos = 0.0
 	
 	for row in part:
-		if row[0] == -1:
+		if row[1] == -1:
 			no_neg += 1
 		else:
 			no_pos += 1
@@ -52,16 +55,18 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 	neg_entities = 0
 	
 	for row in data_rows:
-		if row[0] == -1:
+		if row[1] == -1:
 			neg_entities += 1
-		elif row[0] == 1:
+		elif row[1] == 1:
 			pos_entities += 1
 	
 	if (pos_entities == 0 or neg_entities == 0):
 		print ("THIS IS A PURE NODE")
 	
 	else:
-		for current_feature_index in range(1, max_features):
+		rows, cols = data_rows.shape
+		#print("ROWS COLS",rows, cols)
+		for current_feature_index in range(2, cols):
 			print('CURRENT FEATURE INDEXXXXXXXX', current_feature_index)
 			if current_feature_index not in used_feature_indexes:
 	
@@ -118,9 +123,10 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 	
 data_rows = []
 data_rows.append(impurity_matrix[0])
-
 data_rows.append(impurity_matrix[1])
+
 data_rows.append(impurity_matrix[2])
+data_rows.append(impurity_matrix[3])
 
 max_no_features = len(data_rows)
 data_rows = np.array(data_rows)
