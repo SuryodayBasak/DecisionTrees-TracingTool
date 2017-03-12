@@ -37,7 +37,6 @@ def ret_gini (part, current_feature_index):
 			no_pos += 1
 			
 	total = no_neg + no_pos
-	print(total)
 	return 1-((no_neg / total)**2+(no_pos / total)**2)
 
 def trace_tree(data_rows, max_features, used_feature_indexes = []):
@@ -48,13 +47,13 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 	best_feature_index = None
 	total_iterations = 0
 	
-	for current_feature_index in range(1, len(data_rows)):
+	for current_feature_index in range(1, max_features):
+		print('CURRENT FEATURE INDEXXXXXXXX', current_feature_index)
 		if current_feature_index not in used_feature_indexes:
 
-			data_rows = np.array(data_rows)
-			split_data = data_rows.transpose()
-			split_data = np.array(split_data)
-			print(split_data)
+			split_data = data_rows
+			#split_data = np.array(split_data)
+			#print(split_data)
 			split_data =  split_data[split_data[:,current_feature_index].argsort()]
 			node_gini_impurity = ret_gini(split_data,current_feature_index)
 			print("The node's impurity is: ", node_gini_impurity)
@@ -96,14 +95,21 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 	print(optimal_right)
 	print(total_iterations)
 	print(used_feature_indexes)
-
+	
+	
+	if (len(used_feature_indexes) != max_features):
+		trace_tree(optimal_left, max_no_features, used_feature_indexes)
+		trace_tree(optimal_right, max_no_features, used_feature_indexes)
+	
 data_rows = []
 data_rows.append(impurity_matrix[0])
 
 data_rows.append(impurity_matrix[1])
 data_rows.append(impurity_matrix[2])
 
-print(len(data_rows))
-trace_tree(data_rows, len(data_rows))
+max_no_features = len(data_rows)
+data_rows = np.array(data_rows)
+data_rows = data_rows.transpose()
+trace_tree(data_rows, max_no_features)
 
 #TO DO: use a numbering for samples; within the function, perform a splitting of the dataset; recursive calls, etc.
