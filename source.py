@@ -46,60 +46,74 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 	optimal_right = None
 	best_feature_index = None
 	total_iterations = 0
+	print(data_rows)
 	
-	for current_feature_index in range(1, max_features):
-		print('CURRENT FEATURE INDEXXXXXXXX', current_feature_index)
-		if current_feature_index not in used_feature_indexes:
-
-			split_data = data_rows
-			#split_data = np.array(split_data)
-			#print(split_data)
-			split_data =  split_data[split_data[:,current_feature_index].argsort()]
-			node_gini_impurity = ret_gini(split_data,current_feature_index)
-			print("The node's impurity is: ", node_gini_impurity)
+	pos_entities = 0
+	neg_entities = 0
 	
-			for j in range(1, len(split_data)):
-				left_part = split_data[:j]
-				right_part = split_data[j:]
+	for row in data_rows:
+		if row[0] == -1:
+			neg_entities += 1
+		elif row[0] == 1:
+			pos_entities += 1
+	
+	if (pos_entities == 0 or neg_entities == 0):
+		print ("THIS IS A PURE NODE")
+	
+	else:
+		for current_feature_index in range(1, max_features):
+			print('CURRENT FEATURE INDEXXXXXXXX', current_feature_index)
+			if current_feature_index not in used_feature_indexes:
+	
+				split_data = data_rows
+				#split_data = np.array(split_data)
+				#print(split_data)
+				split_data =  split_data[split_data[:,current_feature_index].argsort()]
+				node_gini_impurity = ret_gini(split_data,current_feature_index)
+				print("The node's impurity is: ", node_gini_impurity)
+	
+				for j in range(1, len(split_data)):
+					left_part = split_data[:j]
+					right_part = split_data[j:]
 			
-				gini_left = ret_gini(left_part,current_feature_index)
-				gini_right = ret_gini(right_part,current_feature_index)
+					gini_left = ret_gini(left_part,current_feature_index)
+					gini_right = ret_gini(right_part,current_feature_index)
 		
-				N_left = float(len(left_part))
-				N_right = float(len(right_part))
-				total = N_left + N_right
-				p_left = N_left/total
-				p_right = N_right/total
+					N_left = float(len(left_part))
+					N_right = float(len(right_part))
+					total = N_left + N_right
+					p_left = N_left/total
+					p_right = N_right/total
 		
-				GiniGain = node_gini_impurity - (p_left*gini_left) - (p_right*gini_right)
-				print(GiniGain)
-				print(left_part)
-				print(right_part)
-				print('')
+					GiniGain = node_gini_impurity - (p_left*gini_left) - (p_right*gini_right)
+					print(GiniGain)
+					print(left_part)
+					print(right_part)
+					print('')
 		
-				if GiniGain > max_gain:
-					max_gain = GiniGain
-					optimal_left = left_part
-					optimal_right = right_part
-					best_feature_index = current_feature_index
-				#time.sleep(1)
-				total_iterations += 1
+					if GiniGain > max_gain:
+						max_gain = GiniGain
+						optimal_left = left_part
+						optimal_right = right_part
+						best_feature_index = current_feature_index
+					#time.sleep(1)
+					total_iterations += 1
 
-	if best_feature_index not in used_feature_indexes:
-		used_feature_indexes.append(best_feature_index)
+		if best_feature_index not in used_feature_indexes:
+			used_feature_indexes.append(best_feature_index)
 		
-	print('Best gain is: ', max_gain)
-	print('Best left branch: ')
-	print(optimal_left)
-	print('Best right branch: ')
-	print(optimal_right)
-	print(total_iterations)
-	print(used_feature_indexes)
+		print('Best gain is: ', max_gain)
+		print('Best left branch: ')
+		print(optimal_left)
+		print('Best right branch: ')
+		print(optimal_right)
+		print(total_iterations)
+		print(used_feature_indexes)
 	
 	
-	if (len(used_feature_indexes) != max_features):
-		trace_tree(optimal_left, max_no_features, used_feature_indexes)
-		trace_tree(optimal_right, max_no_features, used_feature_indexes)
+		if (len(used_feature_indexes) != max_features):
+			trace_tree(optimal_left, max_no_features, used_feature_indexes)
+			trace_tree(optimal_right, max_no_features, used_feature_indexes)
 	
 data_rows = []
 data_rows.append(impurity_matrix[0])
