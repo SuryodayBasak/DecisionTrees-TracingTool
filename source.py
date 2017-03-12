@@ -4,7 +4,7 @@ import time
 
 DATASET = []
 
-with open('/home/suryo/MyStuff/MyDev/Stocks_ShuYash/examples/rf/training_set.csv', 'r') as csvfile:
+with open('./training_set.csv', 'r') as csvfile:
 	data = csv.reader(csvfile, delimiter=',')
 	for row in data:
 		temp = []
