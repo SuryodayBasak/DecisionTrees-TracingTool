@@ -87,8 +87,8 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 		
 					GiniGain = node_gini_impurity - (p_left*gini_left) - (p_right*gini_right)
 					print(GiniGain)
-					print(left_part)
-					print(right_part)
+					#print(left_part)
+					#print(right_part)
 					print('')
 		
 					if GiniGain > max_gain:
@@ -111,7 +111,8 @@ def trace_tree(data_rows, max_features, used_feature_indexes = []):
 		print(used_feature_indexes)
 	
 	
-		if (len(used_feature_indexes) != max_features):
+		if (len(used_feature_indexes) != max_features-1):
+			print(len(used_feature_indexes), max_features)
 			trace_tree(optimal_left, max_no_features, used_feature_indexes)
 			trace_tree(optimal_right, max_no_features, used_feature_indexes)
 	
