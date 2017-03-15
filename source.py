@@ -114,7 +114,9 @@ def trace_tree(data_rows, max_features, feature_names):
 		
 		print('Best gain is: ', max_gain)
 		print('The split feature is: ', feature_names[best_feature_index-2])
-		
+		left_branch_rows, left_branch_cols = np.shape(optimal_left)
+		#print('The split threshold is: ', optimal_left[len(optimal_left)-1,0])
+		print('The split threshold is: ', optimal_left[left_branch_rows-1, best_feature_index])
 		print('Best left branch: ')
 		#optimal_left = optimal_left[optimal_left[:,0].argsort()]
 		print(optimal_left)
@@ -132,8 +134,8 @@ def trace_tree(data_rows, max_features, feature_names):
 			print(len(used_feature_indexes), max_features)
 			trace_tree(optimal_left, max_no_features, used_feature_indexes)
 			trace_tree(optimal_right, max_no_features, used_feature_indexes)"""
-		trace_tree(optimal_left, max_no_features)
-		trace_tree(optimal_right, max_no_features)
+		trace_tree(optimal_left, max_no_features, feature_names)
+		trace_tree(optimal_right, max_no_features, feature_names)
 	
 data_rows = []
 data_rows.append(impurity_matrix[0])
